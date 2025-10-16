@@ -1,4 +1,4 @@
-# Business Requirements Document
+# Learning
 
 This document outlines the structure and functionality of the **Udoy learning platform** in clear, simple terms. It explains what the website will be, how it will work, and the responsibilities of each user group. The goal is to provide a straightforward, non-technical understanding of the platform.
 
