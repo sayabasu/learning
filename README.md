@@ -241,3 +241,47 @@ The **Udoy platform** functions as a **digital school** where:
 - Sponsors support the ecosystem.
 - Admins maintain and manage the platform.
 
+---
+
+## Running the Reference Implementation
+
+This repository now includes a fully working FastAPI backend that models the complete Udoy platform experience described above. The implementation lives under the `app/` package and persists data to a local SQLite database (`udoy.db`).
+
+### 1. Install dependencies
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+### 2. Start the API server
+
+```bash
+uvicorn app.main:app --reload
+```
+
+The API is documented automatically at `http://127.0.0.1:8000/docs` where you can try every endpoint interactively.
+
+### 3. Seed data and roles
+
+On first launch the application seeds an administrator account:
+
+- **Email:** `admin@udoy.local`
+- **Password:** `admin123`
+
+Use this account to approve content, manage roles, or publish courses.
+
+### 4. Feature coverage by role
+
+| Role | Highlights |
+| --- | --- |
+| Students | Register/login, enroll, attempt quizzes, receive certificates & credits, leave lesson feedback, see personalized dashboard, notifications, and smart recommendations. |
+| Content Creators | Build courses/lessons/quizzes, submit for validation, track enrollments, inspect feedback, and review performance insights for their catalog. |
+| Validators | Approve or reject lessons with feedback and monitor pending submissions. |
+| Coaches | Organize chapters, assign lessons, view every student’s trajectory, and allocate sponsor-backed credits. |
+| Sponsors | Donate credits and read transparent credit impact reports. |
+| Admins | Manage users/roles, publish courses, inspect analytics, and audit activity logs and credit pools. |
+
+All major subsystems from the specification—including gamification badges, content approval workflow, credit distribution, notifications, analytics dashboards, recommendation engine, and versioned activity logging—are represented in the API.
+
