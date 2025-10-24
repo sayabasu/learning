@@ -53,9 +53,9 @@ class User(SQLModel, table=True):
     is_active: bool = Field(default=True)
     created_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)
 
-    courses: List["Course"] = Relationship(back_populates="creator")
-    enrollments: List["Enrollment"] = Relationship(back_populates="student")
-    notifications: List["Notification"] = Relationship(back_populates="user")
+    courses: list["Course"] = Relationship(back_populates="creator")
+    enrollments: list["Enrollment"] = Relationship(back_populates="student")
+    notifications: list["Notification"] = Relationship(back_populates="user")
 
 
 class Course(SQLModel, table=True):
@@ -71,7 +71,7 @@ class Course(SQLModel, table=True):
     created_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)
 
     creator: Optional[User] = Relationship(back_populates="courses")
-    lessons: List["Lesson"] = Relationship(back_populates="course")
+    lessons: list["Lesson"] = Relationship(back_populates="course")
 
 
 class Lesson(SQLModel, table=True):
@@ -100,7 +100,7 @@ class Quiz(SQLModel, table=True):
     created_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)
 
     lesson: Optional[Lesson] = Relationship(back_populates="quiz")
-    questions: List["QuizQuestion"] = Relationship(back_populates="quiz")
+    questions: list["QuizQuestion"] = Relationship(back_populates="quiz")
 
 
 class QuizQuestion(SQLModel, table=True):
