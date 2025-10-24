@@ -1,10 +1,35 @@
 services:
+  backend:
+    build:
+      context: backend
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-sqlite:///data/udoy.db}
+      SECRET_KEY: ${SECRET_KEY:-change-me}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES:-1440}
+      INITIAL_ADMIN_EMAIL: ${INITIAL_ADMIN_EMAIL:-admin@udoy.local}
+      INITIAL_ADMIN_PASSWORD: ${INITIAL_ADMIN_PASSWORD:-admin123}
+    volumes:
+      - backend_data:/app/data
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    restart: unless-stopped
+
   frontend:
     build:
       context: .
       dockerfile: Dockerfile
       args:
-        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8000}
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://backend:8000}
+    env_file:
+      - .env
+    depends_on:
+      - backend
     ports:
       - "${FRONTEND_PORT:-8080}:80"
     restart: unless-stopped
+
+volumes:
+  backend_data:
