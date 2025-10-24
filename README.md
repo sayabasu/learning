@@ -285,3 +285,25 @@ Use this account to approve content, manage roles, or publish courses.
 
 All major subsystems from the specification—including gamification badges, content approval workflow, credit distribution, notifications, analytics dashboards, recommendation engine, and versioned activity logging—are represented in the API.
 
+---
+
+## Containerized frontend runtime
+
+You can launch the Vite/React reference frontend through Docker Compose. The setup builds the production bundle and serves it behind Nginx.
+
+1. Copy the example environment to `.env` and adjust the values to match your stack (especially the API base URL):
+
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Build and start the containerised frontend:
+
+   ```bash
+   docker compose up --build
+   ```
+
+3. Visit the application at `http://localhost:8080/` (or the host/port combination you configured through `FRONTEND_PORT`).
+
+The build process injects the `VITE_API_BASE_URL` value at compile time. Rebuild the image whenever you change any `VITE_` environment variables so that the new configuration is picked up by Vite.
+
