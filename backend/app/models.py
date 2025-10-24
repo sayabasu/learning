@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime
 from enum import Enum
-from typing import List, Optional
+from typing import Optional
 
 from sqlalchemy import Column, UniqueConstraint
 from sqlalchemy.dialects.sqlite import JSON
@@ -109,7 +109,7 @@ class QuizQuestion(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     quiz_id: int = Field(foreign_key="quizzes.id")
     prompt: str
-    options: List[str] = Field(sa_column=Column(JSON))
+    options: list[str] = Field(sa_column=Column(JSON))
     answer_index: int
 
     quiz: Optional[Quiz] = Relationship(back_populates="questions")
@@ -122,7 +122,7 @@ class QuizAttempt(SQLModel, table=True):
     quiz_id: int = Field(foreign_key="quizzes.id")
     student_id: int = Field(foreign_key="users.id")
     score: float
-    responses: List[int] = Field(sa_column=Column(JSON))
+    responses: list[int] = Field(sa_column=Column(JSON))
     attempted_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)
 
 
