@@ -245,65 +245,65 @@ The **Udoy platform** functions as a **digital school** where:
 
 ## Running the Reference Implementation
 
-This repository now includes a fully working FastAPI backend that models the complete Udoy platform experience described above. The implementation lives under the `app/` package and persists data to a local SQLite database (`udoy.db`).
+The repository now operates as a monorepo:
 
-### 1. Install dependencies
+- `frontend/` — Vite + React reference client.
+- `backend/` — FastAPI + SQLModel service backed by a SQLite database.
+
+### Backend (FastAPI)
 
 ```bash
+cd backend
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-```
-
-### 2. Start the API server
-
-```bash
 uvicorn app.main:app --reload
 ```
 
-The API is documented automatically at `http://127.0.0.1:8000/docs` where you can try every endpoint interactively.
+The interactive API docs live at `http://127.0.0.1:8000/docs`. On startup the server seeds an administrator account using the credentials configured in your environment (defaults: `admin@udoy.local` / `admin123`).
 
-### 3. Seed data and roles
+### Frontend (Vite)
 
-On first launch the application seeds an administrator account:
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-- **Email:** `admin@udoy.local`
-- **Password:** `admin123`
+Point the frontend to the backend by setting `VITE_API_BASE_URL` in your `.env` (defaults to the Docker service name `http://backend:8000`).
 
-Use this account to approve content, manage roles, or publish courses.
-
-### 4. Feature coverage by role
+### Feature coverage by role
 
 | Role | Highlights |
 | --- | --- |
-| Students | Register/login, enroll, attempt quizzes, receive certificates & credits, leave lesson feedback, see personalized dashboard, notifications, and smart recommendations. |
-| Content Creators | Build courses/lessons/quizzes, submit for validation, track enrollments, inspect feedback, and review performance insights for their catalog. |
-| Validators | Approve or reject lessons with feedback and monitor pending submissions. |
-| Coaches | Organize chapters, assign lessons, view every student’s trajectory, and allocate sponsor-backed credits. |
-| Sponsors | Donate credits and read transparent credit impact reports. |
-| Admins | Manage users/roles, publish courses, inspect analytics, and audit activity logs and credit pools. |
+| Students | Self-registration, login, enrollments, quiz attempts, progress tracking, and reward notifications. |
+| Content Creators | Create and submit courses/lessons, attach quizzes, and monitor pending approvals. |
+| Validators | Review queued lessons and approve content for publication. |
+| Coaches | Update student progress (with explicit student selection) and award performance credits. |
+| Sponsors | Donate credits into the platform ledger for transparency. |
+| Admins | Manage users, publish courses, and review platform activity via dashboards and audit logs. |
 
-All major subsystems from the specification—including gamification badges, content approval workflow, credit distribution, notifications, analytics dashboards, recommendation engine, and versioned activity logging—are represented in the API.
+Key subsystems from the specification—content approval workflows, enrollments, credit distribution, dashboards, notifications, and activity logging—are represented in this implementation.
 
 ---
 
-## Containerized frontend runtime
+## Containerised runtime with Docker Compose
 
-You can launch the Vite/React reference frontend through Docker Compose. The setup builds the production bundle and serves it behind Nginx.
+Use Docker Compose to build and run both services together:
 
-1. Copy the example environment to `.env` and adjust the values to match your stack (especially the API base URL):
+1. Copy the example environment and adjust values as needed:
 
    ```bash
    cp .env.example .env
    ```
 
-2. Build and start the containerised frontend:
+2. Build and start the stack:
 
    ```bash
    docker compose up --build
    ```
 
-3. Visit the application at `http://localhost:8080/` (or the host/port combination you configured through `FRONTEND_PORT`).
+3. Access the frontend at `http://localhost:8080/` and the API at `http://localhost:8000/` (or the ports you configure via `.env`).
 
-The build process injects the `VITE_API_BASE_URL` value at compile time. Rebuild the image whenever you change any `VITE_` environment variables so that the new configuration is picked up by Vite.
+The frontend image bakes `VITE_API_BASE_URL` at build time. Rebuild the container whenever you change that value to ensure the new configuration is applied.
 

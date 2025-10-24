@@ -1,7 +1,11 @@
 venv/
+.venv/
 __pycache__/
 *.pyc
 udoy.db
+backend/.venv/
+backend/__pycache__/
+backend/data/
 .env
 node_modules/
 frontend/node_modules/
